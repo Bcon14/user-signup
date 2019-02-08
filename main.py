@@ -19,11 +19,10 @@ def index():
 
 
 
-@app.route("/welocme", methods=['POST'])
+@app.route("/welcome", methods=['POST'])
 def welcome():
-    user_name = request.form['username']
     template = jinja_env.get_template("welcome.html")
-    return template.render(username=user_name)
+    return template.render()
 
 
 
@@ -37,15 +36,8 @@ def isSame(first, second):
 
 
 
-@app.route('/validate_form')
-def display_form():
-    template = jinja_env.get_template('.html')
-    return template.render()
 
-
-
-
-@app.route('/validate_form', methods=['POST'])
+@app.route('/', methods=['POST'])
 def validate():
     user_name = request.form['username']
     password = request.form['password']
@@ -78,14 +70,15 @@ def validate():
 
 
     
-    if not user_error and not password_error and not email_error:
-        return redirect('/welcome?username={0}'.format(user_name))
+    if user_error == '' and password_error == '' and vpassword_error == '' and email_error == '':
+        return render_template('/welcome.html', username=user_name)
     else:
         template = jinja_env.get_template('user-form.html')
         return template.render(user_error=user_error,
             password_error=password_error,
+            vpassword_error=vpassword_error,
             email_error=email_error,
-            user_name=user_name)
+            username=user_name)
     
     
 
